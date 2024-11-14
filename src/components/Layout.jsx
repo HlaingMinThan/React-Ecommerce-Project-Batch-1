@@ -1,17 +1,19 @@
-function Layout({children}) {
+import { Link, Outlet } from "react-router-dom"
+
+function Layout() {
     return (
         <>
             <header>
                 <nav>
-                    <ul><li><a href="">Home</a></li></ul>
-                    <ul><li><a href="">About</a></li></ul>
+                    <ul><li><Link to="/">Home</Link></li></ul>
+                    <ul><li><Link to="/about">About</Link></li></ul>
                 </nav>
             </header>
-            {children}
+            <Outlet />
             <footer>
                 <nav>
-                    <ul><li><a href="">Home</a></li></ul>
-                    <ul><li><a href="">About</a></li></ul>
+                    <ul><li><Link to="/">Home</Link></li></ul>
+                    <ul><li><Link to="/about">About</Link></li></ul>
                 </nav>
             </footer>
         </>
