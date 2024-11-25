@@ -1,7 +1,9 @@
+import { Link } from "react-router-dom";
+
 export default function ProductCard({ product }) {
     return (
         <div className="cursor-pointer">
-            <a href="/productDetail.html">
+            <Link to={`/products/${product.id}`}>
                 <div
                     className="w-full h-auto bg-[#F7F8F9] group rounded-xl overflow-hidden"
                 >
@@ -14,7 +16,7 @@ export default function ProductCard({ product }) {
                 <div className="flex gap-2 text-sm items-center font-semibold mt-1">
                     <p className="text-primary">{product.price} MMK</p>
                 </div>
-            </a>
+            </Link>
         </div>
     )
 }
