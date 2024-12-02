@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
 import CC from '../assets/cc.jpg';
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 
 export default function Navbar() {
+    let { user, setUser } = useContext(AuthContext);
+
     return (
         <div
             className="flex items-center justify-between xl:px-32 sm:px-5 px-2 bg-secondary"
@@ -35,21 +39,35 @@ export default function Navbar() {
                     </div>
                     <p>Your Cart</p>
                 </div>
-                <div className="md:flex hidden items-center gap-3">
+                {!user ? (<div className="md:flex hidden items-center gap-3">
                     <a
                         href="/login.html"
                         className="px-8 py-4 font-bold rounded-lg bg-primary text-white"
                     >
                         Login
                     </a>
-                    <a
-                        href="/register.html"
+                    <Link
+                        to="/register"
                         className="px-8 py-4 font-bold rounded-lg text-primary border-2 border-primary"
                     >
                         Register
-                    </a>
-                </div>
+                    </Link>
+                </div>) :
+                    (
+                        <>
+                            <div>
+                                <p className="text-white">{user.name}</p>
+                            </div>
+                            <button
+                                type="button"
+                                className="px-8 py-4 font-bold rounded-lg bg-red-500 text-white"
+                                onClick={() => { localStorage.removeItem("token"); setUser(null); }}
+                            >
+                                Logout
+                            </button>
+                        </>
+                    )}
             </div>
-        </div>
+        </div >
     )
 }

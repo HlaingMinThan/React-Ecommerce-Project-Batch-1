@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import {
   RouterProvider,
@@ -6,10 +5,11 @@ import {
 import router from './route/index.jsx';
 import "./index.css"
 import axios from 'axios';
+import { AuthContextProvider } from './contexts/AuthContext.jsx';
 axios.defaults.baseURL = 'http://localhost:8000';
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  <AuthContextProvider>
     <RouterProvider router={router} />
-  </StrictMode>,
+  </AuthContextProvider>,
 )

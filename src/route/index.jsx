@@ -1,6 +1,7 @@
 import Home from '../pages/Home.jsx';
 import About from '../pages/About.jsx';
 import ProductDetail from '../pages/ProductDetail.jsx';
+import Register from '../pages/Register.jsx';
 import AdminProductList from '../pages/admin/AdminProductList.jsx';
 import AdminProductCreate from '../pages/admin/AdminProductCreate.jsx';
 import Layout from '../components/Layout.jsx';
@@ -17,6 +18,10 @@ const router = createBrowserRouter([{
     {
       path: "/",
       element: <Home />,
+    },
+    {
+      path: "/register",
+      element: <Register />,
     },
     {
       path: "/about",

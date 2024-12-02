@@ -1,11 +1,16 @@
 import ProductCard from '../components/ProductCard.jsx';
 import useProducts from '../hooks/useProducts.jsx';
 import useCategories from '../hooks/useCategories.jsx';
+import { useContext } from 'react';
+import { AuthContext } from '../contexts/AuthContext.jsx';
 
 export default function Home() {
 
     let { products, search, setSearch } = useProducts();
     let { categories } = useCategories();
+
+    let { name } = useContext(AuthContext);
+    console.log(name, 'home component')
 
     return (
         <div className="xl:px-32 sm:px-5 px-2">
