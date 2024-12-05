@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useContext, useState } from "react";
 import InputError from '../components/InputError';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 
 function Register() {
@@ -106,7 +106,7 @@ function Register() {
                     </button>
                     <p className="text-sm text-center font-semibold">
                         Already have an account? Login
-                        <a className="text-primary underline" href="/login.html">here.</a>
+                        <Link className="text-primary underline" to="/login">here.</Link>
                     </p>
                 </form>
             </div>

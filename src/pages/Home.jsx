@@ -1,16 +1,11 @@
 import ProductCard from '../components/ProductCard.jsx';
 import useProducts from '../hooks/useProducts.jsx';
 import useCategories from '../hooks/useCategories.jsx';
-import { useContext } from 'react';
-import { AuthContext } from '../contexts/AuthContext.jsx';
 
 export default function Home() {
 
     let { products, search, setSearch } = useProducts();
     let { categories } = useCategories();
-
-    let { name } = useContext(AuthContext);
-    console.log(name, 'home component')
 
     return (
         <div className="xl:px-32 sm:px-5 px-2">
@@ -70,7 +65,6 @@ export default function Home() {
                         className="grid lg:grid-cols-4 md:grid-cols-2 mb-14 gap-x-5 gap-y-10"
                     >
                         {products.map((product) => (<ProductCard key={product.id} product={product} />))}
-
                     </div>
                 </div>
             </div>

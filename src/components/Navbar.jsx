@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 
 export default function Navbar() {
-    let { user, setUser } = useContext(AuthContext);
+    let { user, dispatch } = useContext(AuthContext);
 
     return (
         <div
@@ -40,12 +40,12 @@ export default function Navbar() {
                     <p>Your Cart</p>
                 </div>
                 {!user ? (<div className="md:flex hidden items-center gap-3">
-                    <a
-                        href="/login.html"
+                    <Link
+                        to="/login"
                         className="px-8 py-4 font-bold rounded-lg bg-primary text-white"
                     >
                         Login
-                    </a>
+                    </Link>
                     <Link
                         to="/register"
                         className="px-8 py-4 font-bold rounded-lg text-primary border-2 border-primary"
@@ -61,7 +61,7 @@ export default function Navbar() {
                             <button
                                 type="button"
                                 className="px-8 py-4 font-bold rounded-lg bg-red-500 text-white"
-                                onClick={() => { localStorage.removeItem("token"); setUser(null); }}
+                                onClick={() => { dispatch({ type: 'UNAUTHENTICATED' }) }}
                             >
                                 Logout
                             </button>

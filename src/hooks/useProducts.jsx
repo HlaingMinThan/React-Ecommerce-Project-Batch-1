@@ -10,7 +10,6 @@ function useProducts() {
     }
 
     useEffect(() => {
-        console.log('search effect is running')
         getProducts(search);
     }, [search])
 

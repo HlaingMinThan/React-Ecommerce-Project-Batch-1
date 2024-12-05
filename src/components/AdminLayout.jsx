@@ -34,8 +34,8 @@ function AdminLayout() {
                                         <div
                                             className="w-full rounded-[4px] transition-all duration-150 mb-3 hover:bg-primary"
                                         >
-                                            <a
-                                                href="#"
+                                            <Link
+                                                to="/admin"
                                                 className="relative flex items-center gap-2.5 rounded-sm py-3 px-4 font-semibold text-sm duration-300 ease-in-out"
                                             >
                                                 <svg
@@ -51,7 +51,7 @@ function AdminLayout() {
                                                 </svg>
 
                                                 Product
-                                            </a>
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>

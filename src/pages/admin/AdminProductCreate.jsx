@@ -4,7 +4,6 @@ import axios from "axios";
 
 function AdminProductCreate() {
     let { categories } = useCategories();
-    console.log(categories)
     let [form, setForm] = useState({
         name: '',
         price: '',
@@ -13,7 +12,11 @@ function AdminProductCreate() {
     })
 
     let createProduct = async () => {
-        let res = await axios.post('/api/products', form);
+        let res = await axios.post('/api/products', form, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
         console.log(res);
     }
 
