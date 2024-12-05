@@ -1,9 +1,12 @@
 import { useState } from "react";
 import useCategories from "../../hooks/useCategories";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function AdminProductCreate() {
+    let navigate = useNavigate();
     let { categories } = useCategories();
+    let [loading, setLoading] = useState(false);
     let [form, setForm] = useState({
         name: '',
         price: '',
@@ -12,12 +15,16 @@ function AdminProductCreate() {
     })
 
     let createProduct = async () => {
+        setLoading(true)
         let res = await axios.post('/api/products', form, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
-        console.log(res);
+        if (res.status === 200) {
+            setLoading(false)
+            navigate('/admin')
+        }
     }
 
     return (
@@ -89,6 +96,7 @@ function AdminProductCreate() {
                             Cancel
                         </a>
                         <button
+                            disabled={loading}
                             type="button"
                             onClick={createProduct}
                             className="text-sm px-4 flex items-center gap-3 shadow-md py-3 text-white bg-primary hover:bg-blue-900 font-semibold rounded-md transition-all active:animate-press"
