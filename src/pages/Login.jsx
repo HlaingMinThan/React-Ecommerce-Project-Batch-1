@@ -19,10 +19,11 @@ function Login() {
             e.preventDefault();
             let res = await axios.post("/api/login", form);
             //password incorrect error handling
-            if (res.data.message) {
+            if (res.data.message !== 'login success') {
                 setErrors({
                     email: res.data.message
                 })
+                return;
             }
 
             //login user
