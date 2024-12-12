@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useCategories from "../../hooks/useCategories";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import useProduct from "../../hooks/useProduct";
 
-function AdminProductCreate() {
+function AdminProductForm() {
     let navigate = useNavigate();
+    let { id } = useParams();
+    let { product } = useProduct(id);
+    let [isEdit, setIsEdit] = useState(false);
     let { categories } = useCategories();
     let [loading, setLoading] = useState(false);
     let [form, setForm] = useState({
@@ -14,9 +18,27 @@ function AdminProductCreate() {
         description: ''
     })
 
-    let createProduct = async () => {
+    useEffect(() => {
+        setIsEdit(!!id)
+    }, [id])
+
+    useEffect(() => {
+        if (product) {
+            setForm({
+                name: product.name,
+                price: product.price,
+                category_id: product.category_id,
+                description: product.description,
+            })
+        }
+    }, [product])
+
+    let submit = async () => {
         setLoading(true)
-        let res = await axios.post('/api/products', form, {
+        let method = isEdit ? 'put' : 'post';
+        let url = isEdit ? "/api/products/" + id : '/api/products';
+
+        let res = await axios[method](url, form, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -29,7 +51,7 @@ function AdminProductCreate() {
 
     return (
         <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10 bg-gray-50">
-            <h1 className="text-xl font-bold my-4">Product Create Form</h1>
+            <h1 className="text-xl font-bold my-4">Product {isEdit ? 'Edit' : 'Create'} Form</h1>
             <div className="border p-10 bg-white rounded-md">
                 <form className="space-y-4 md:space-y-6">
                     <div className="">
@@ -98,10 +120,10 @@ function AdminProductCreate() {
                         <button
                             disabled={loading}
                             type="button"
-                            onClick={createProduct}
+                            onClick={submit}
                             className="text-sm px-4 flex items-center gap-3 shadow-md py-3 text-white bg-primary hover:bg-blue-900 font-semibold rounded-md transition-all active:animate-press"
                         >
-                            Create
+                            {isEdit ? 'Update' : 'Create'}
                         </button>
                     </div>
                 </form>
@@ -110,4 +132,4 @@ function AdminProductCreate() {
     )
 }
 
-export default AdminProductCreate
+export default AdminProductForm

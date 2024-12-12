@@ -1,7 +1,6 @@
 import ProductCard from '../components/ProductCard.jsx';
 import useProducts from '../hooks/useProducts.jsx';
 import useCategories from '../hooks/useCategories.jsx';
-
 export default function Home() {
 
     let { products, search, setSearch } = useProducts();

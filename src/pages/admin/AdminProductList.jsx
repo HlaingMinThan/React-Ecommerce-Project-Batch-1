@@ -1,8 +1,42 @@
 import { Link } from "react-router-dom";
 import useProducts from "../../hooks/useProducts"
+import axios from "axios";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+const MySwal = withReactContent(Swal);
 
 function AdminProductList() {
-    let { products, search, setSearch } = useProducts();
+    let { products, search, setSearch, setProducts } = useProducts();
+
+    let deleteProduct = async (id) => {
+
+        let result = await MySwal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+        })
+
+        if (result.isConfirmed) {
+            try {
+                let res = await axios.delete('/api/products/' + id, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                }); //frontend -> backend -> deleted ?
+                if (res.status === 200) {
+                    setProducts(prev => prev.filter(product => product.id != id))
+                    Swal.fire('Deleted!', 'Your item has been deleted.', 'success');
+                }
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }
 
     return (
         <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10 bg-gray-50">
@@ -94,8 +128,8 @@ function AdminProductList() {
                                             <div
                                                 className="space-x-3 flex items-center min-w-[200px] w-auto max-w-[500px]"
                                             >
-                                                <a
-                                                    href=""
+                                                <Link
+                                                    to={`/admin/products/${product.id}/edit`}
                                                     className="text-sm px-4 flex items-center gap-3 shadow-md py-3 text-white bg-primary hover:bg-blue-900 font-semibold rounded-md transition-all active:animate-press"
                                                 >
                                                     <svg
@@ -110,10 +144,11 @@ function AdminProductList() {
                                                         />
                                                     </svg>
                                                     Edit
-                                                </a>
-                                                <a
-                                                    href=""
+                                                </Link>
+                                                <buton
+                                                    type="button"
                                                     className="text-sm px-4 flex items-center gap-3 shadow-md py-3 text-white bg-red-500 hover:bg-blue-900 font-semibold rounded-md transition-all active:animate-press"
+                                                    onClick={() => deleteProduct(product.id)}
                                                 >
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
@@ -127,7 +162,7 @@ function AdminProductList() {
                                                         />
                                                     </svg>
                                                     Delete
-                                                </a>
+                                                </buton>
                                             </div>
                                         </td>
                                     </tr>

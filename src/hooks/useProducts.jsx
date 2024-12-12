@@ -16,7 +16,8 @@ function useProducts() {
     return {
         products,
         search,
-        setSearch
+        setSearch,
+        setProducts
     }
 }
 

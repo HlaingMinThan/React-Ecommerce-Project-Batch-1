@@ -4,7 +4,7 @@ import ProductDetail from '../pages/ProductDetail.jsx';
 import Register from '../pages/Register.jsx';
 import Login from '../pages/Login.jsx';
 import AdminProductList from '../pages/admin/AdminProductList.jsx';
-import AdminProductCreate from '../pages/admin/AdminProductCreate.jsx';
+import AdminProductForm from '../pages/admin/AdminProductForm.jsx';
 import Layout from '../components/Layout.jsx';
 import AdminLayout from '../components/AdminLayout.jsx';
 
@@ -48,7 +48,11 @@ const router = createBrowserRouter([{
     },
     {
       path: "/admin/products/create",
-      element: <AdminProductCreate />,
+      element: <AdminProductForm />,
+    },
+    {
+      path: "/admin/products/:id/edit",
+      element: <AdminProductForm />,
     },
   ]
 }
