@@ -3,6 +3,7 @@ import About from '../pages/About.jsx';
 import ProductDetail from '../pages/ProductDetail.jsx';
 import Register from '../pages/Register.jsx';
 import Login from '../pages/Login.jsx';
+import Checkout from '../pages/Checkout.jsx';
 import AdminProductList from '../pages/admin/AdminProductList.jsx';
 import AdminProductForm from '../pages/admin/AdminProductForm.jsx';
 import Layout from '../components/Layout.jsx';
@@ -31,6 +32,10 @@ const router = createBrowserRouter([{
     {
       path: "/about",
       element: <About />,
+    },
+    {
+      path: "/checkout",
+      element: <Checkout />,
     },
     {
       path: "/products/:id",

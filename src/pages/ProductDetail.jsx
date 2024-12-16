@@ -1,11 +1,37 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useProduct from "../hooks/useProduct";
 
 export default function ProductDetail() {
 
     let { id } = useParams();
     let { product } = useProduct(id);
+    let navigate = useNavigate();
+
+    let [quantity, setQuantity] = useState(1)
+
+    const addToCart = () => {
+        const item = {
+            ...product,
+            quantity: Number(quantity)
+        };
+
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        const productIndex = cart.findIndex(cartItem => cartItem.id == id);
+
+        if (productIndex > -1) {
+            // Product already exists, update quantity
+            cart[productIndex].quantity += item.quantity;
+        } else {
+            // Add new product to cart
+            cart.push(item);
+        }
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+        console.log(cart);
+        navigate('/checkout')
+    }
 
     return (
         <>
@@ -247,13 +273,15 @@ export default function ProductDetail() {
                                     <div className="lg:basis-[40%]">
                                         <p className="font-bold mb-2">Quantity</p>
                                         <input
+                                            value={quantity}
+                                            onChange={e => setQuantity(e.target.value)}
                                             className="w-full border-black/10 border-2 rounded-full py-3 pl-5"
                                             type="number"
-                                            value="1"
                                         />
                                     </div>
                                 </div>
                                 <button
+                                    onClick={addToCart}
                                     className="w-full h-full disabled:opacity-45 disabled:cursor-not-allowed text-white bg-primary rounded-full py-4 font-bold mt-3"
                                 >
                                     Add to Cart

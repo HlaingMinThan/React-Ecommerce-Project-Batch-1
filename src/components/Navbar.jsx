@@ -17,12 +17,12 @@ export default function Navbar() {
                 />
             </a>
             <div className="flex items-center gap-5">
-                <div className="flex items-center cursor-pointer text-white">
+                <Link to={'/checkout'} className="flex items-center cursor-pointer text-white">
                     <div className="flex items-center">
                         <p
                             className="w-[25px] rounded-full flex text-sm items-center justify-center h-[25px] bg-primary"
                         >
-                            0
+                            {localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')).length : 0}
                         </p>
                         <svg
                             className="md:w-[50px] w-[30px] h-[50px] md:h-[80px]"
@@ -38,7 +38,7 @@ export default function Navbar() {
                         </svg>
                     </div>
                     <p>Your Cart</p>
-                </div>
+                </Link>
                 {!user ? (<div className="md:flex hidden items-center gap-3">
                     <Link
                         to="/login"

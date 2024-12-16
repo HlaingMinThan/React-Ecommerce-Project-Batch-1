@@ -48,13 +48,11 @@ function AuthContextProvider({ children }) {
                     Authorization: `Bearer ${token}`
                 }
             });
-            setTimeout(() => {
-                if (res.data[0]?.errors?.message === 'Unauthenticated.') {
-                    dispatch({ type: 'UNAUTHENTICATED' });
-                } else {
-                    dispatch({ type: 'LOGIN_USER', payload: res.data });
-                }
-            }, 3000);
+            if (res.data[0]?.errors?.message === 'Unauthenticated.') {
+                dispatch({ type: 'UNAUTHENTICATED' });
+            } else {
+                dispatch({ type: 'LOGIN_USER', payload: res.data });
+            }
         } catch (e) {
             console.log(e)
         }
