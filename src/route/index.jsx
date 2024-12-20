@@ -4,14 +4,17 @@ import ProductDetail from '../pages/ProductDetail.jsx';
 import Register from '../pages/Register.jsx';
 import Login from '../pages/Login.jsx';
 import Checkout from '../pages/Checkout.jsx';
+import AdminOrderList from '../pages/admin/AdminOrderList.jsx';
 import AdminProductList from '../pages/admin/AdminProductList.jsx';
 import AdminProductForm from '../pages/admin/AdminProductForm.jsx';
 import Layout from '../components/Layout.jsx';
 import AdminLayout from '../components/AdminLayout.jsx';
+import ProtectedRoute from '../components/ProtectedRoute.jsx';
 
 import {
   createBrowserRouter,
 } from "react-router-dom";
+import GuestUserRoute from '../components/GuestUser.jsx';
 
 const router = createBrowserRouter([{
   path: "/",
@@ -23,7 +26,7 @@ const router = createBrowserRouter([{
     },
     {
       path: "/login",
-      element: <Login />,
+      element: <GuestUserRoute> <Login /> </GuestUserRoute>,
     },
     {
       path: "/register",
@@ -35,7 +38,11 @@ const router = createBrowserRouter([{
     },
     {
       path: "/checkout",
-      element: <Checkout />,
+      element: <ProtectedRoute><Checkout /></ProtectedRoute>,
+    },
+    {
+      path: "/order-history",
+      element: <ProtectedRoute><Checkout /></ProtectedRoute>,
     },
     {
       path: "/products/:id",
@@ -50,6 +57,10 @@ const router = createBrowserRouter([{
     {
       path: "",
       element: <AdminProductList />,
+    },
+    {
+      path: "/admin/orders",
+      element: <AdminOrderList />,
     },
     {
       path: "/admin/products/create",

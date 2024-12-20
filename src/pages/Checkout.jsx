@@ -1,19 +1,71 @@
+import axios from "axios";
 import { useEffect, useMemo, useState } from "react"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 function Checkout() {
-
+    const MySwal = withReactContent(Swal);
     let [products, setProducts] = useState([]);
-    let [count, setCount] = useState(0);
-    useEffect(() => {
-        let carts = JSON.parse(localStorage.getItem('cart')) || [];
-        setProducts(carts);
-    }, [])
+    let [shipping_address, setShippingAddress] = useState('');
+    let [notes, setNotes] = useState('');
+    let navigate = useNavigate()
 
     let total = useMemo(() => products.reduce((acc, product) => {
         console.log('calculation');
         return acc + product.price * product.quantity;
     }, 0), [products]); //computed property
+
+    let orderCreate = async (e) => {
+        try {
+            e.preventDefault();
+            console.log(products);
+            if (!products.length) {
+                await MySwal.fire({
+                    title: 'Please select an item to order',
+                    text: "you have no item in your cart.",
+                })
+                navigate('/');
+                return;
+            }
+            let order_products = products.map(p => {
+                return {
+                    product_id: p.id,
+                    quantity: p.quantity
+                };
+            })
+            let payload = {
+                shipping_address,
+                notes,
+                total_amount: total,
+                order_products,
+            };
+            let res = await axios.post('/api/orders', payload, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (res.status === 200) {
+                localStorage.setItem('cart', []);
+                await MySwal.fire({
+                    title: 'Order created successfully',
+                    text: "your order is reported to the admin and we will contact you soon.",
+                })
+                navigate('/')
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        let carts = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [];
+        console.log(carts);
+        setProducts(carts);
+    }, [])
+
+
 
     return (
         <div
@@ -21,80 +73,17 @@ function Checkout() {
         >
             <div className="basis-[60%]">
                 <h1 className="font-bold text-2xl">Billing Details
-                    {count}
-                    <button onClick={() => setCount(count + 1)}>count ++</button>
                 </h1>
                 <div className="mt-6 border-[1px] border-black/10 px-6 pt-8 pb-8">
-                    <form className="md:grid md:grid-cols-2 flex flex-col gap-4">
-                        <div className="md:col-span-2 flex flex-col justify-center">
-                            <label className="font-semibold text-sm">Name</label>
-                            <input
-                                className="md:col-span-2 outline-none px-3 focus:ring-0 border-[1px] border-black/10 py-4 rounded-lg focus:border-primary transition-all mt-2"
-                                placeholder="Enter your name"
-                            />
-                        </div>
-                        <div className="md:col-span-2 flex flex-col justify-center">
-                            <label className="font-semibold text-sm">Phone</label>
-                            <input
-                                className="outline-none focus:ring-0 px-3 border-[1px] border-black/10 py-4 rounded-lg focus:border-primary transition-all mt-2"
-                                placeholder="Enter your mobile phone number"
-                            />
-                        </div>
-                        <div className="md:col-span-2 flex flex-col justify-center">
-                            <label className="font-semibold text-sm">Email</label>
-                            <input
-                                className="outline-none focus:ring-0 px-3 border-[1px] border-black/10 py-4 rounded-lg focus:border-primary transition-all mt-2"
-                                placeholder="Enter your email address"
-                                type="email"
-                            />
-                        </div>
-                        <div className="md:col-span-2">
-                            <label className="font-semibold text-sm">Town / City</label>
-                            <select
-                                className="w-full border-[1px] mt-2 px-3 border-black/20 focus:border-primary transition-all py-3 rounded-lg"
-                            >
-                                <option>BoTaHtaung</option>
-                                <option>Insein</option>
-                                <option>Hlegu</option>
-                                <option>Yankin</option>
-                            </select>
-                        </div>
+                    <form className="md:grid md:grid-cols-2 flex flex-col gap-4" onSubmit={orderCreate}>
                         <div className="md:col-span-2 flex flex-col justify-center">
                             <label className="font-semibold text-sm">Shipping Address</label>
                             <input
+                                required
+                                value={shipping_address}
+                                onChange={e => setShippingAddress(e.target.value)}
                                 className="md:col-span-2 outline-none px-3 focus:ring-0 border-[1px] border-black/10 py-4 rounded-lg focus:border-primary transition-all mt-2"
                                 placeholder="Enter your shipping address"
-                            />
-                        </div>
-                        <div className="md:col-span-2 flex flex-col justify-center">
-                            <label className="font-semibold text-sm"
-                            >Create Account Password</label
-                            >
-                            <input
-                                className="md:col-span-2 outline-none px-3 focus:ring-0 border-[1px] border-black/10 py-4 rounded-lg focus:border-primary transition-all mt-2"
-                                label=""
-                                placeholder="Password"
-                            />
-                        </div>
-                        <div className="md:col-span-2 flex flex-col justify-center">
-                            <label className="font-semibold text-sm">Viber</label>
-                            <input
-                                className="outline-none focus:ring-0 border-[1px] px-3 border-black/10 py-4 rounded-lg focus:border-primary transition-all mt-2"
-                                placeholder="Enter your viber Phone no or name"
-                            />
-                        </div>
-                        <div className="md:col-span-2 flex flex-col justify-center">
-                            <label className="font-semibold text-sm">Telegram</label>
-                            <input
-                                className="outline-none focus:ring-0 border-[1px] px-3 border-black/10 py-4 rounded-lg focus:border-primary transition-all mt-2"
-                                placeholder="Enter your telegram Phone no or name"
-                            />
-                        </div>
-                        <div className="md:col-span-2 flex flex-col justify-center">
-                            <label className="font-semibold text-sm">Fb Profile link</label>
-                            <input
-                                className="md:col-span-2 outline-none focus:ring-0 px-3 border-[1px] border-black/10 py-4 rounded-lg focus:border-primary transition-all mt-2"
-                                placeholder="Paste your Fackbook Profile link"
                             />
                         </div>
                         <div className="md:col-span-2 flex flex-col justify-center">
@@ -104,6 +93,8 @@ function Checkout() {
                         <div className="flex md:col-span-2 flex-col">
                             <label className="font-semibold text-sm">Order Notes(optional)</label>
                             <textarea
+                                value={notes}
+                                onChange={e => setNotes(e.target.value)}
                                 rows="5"
                                 className="outline-none focus:ring-0 border-[1px] border-black/10 py-4 rounded-lg focus:border-primary transition-all mt-2"
                             ></textarea>

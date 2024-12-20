@@ -16,7 +16,7 @@ export default function ProductDetail() {
             quantity: Number(quantity)
         };
 
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [];
 
         const productIndex = cart.findIndex(cartItem => cartItem.id == id);
 
