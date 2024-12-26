@@ -9,7 +9,7 @@ export default function ProductCard({ product }) {
                 >
                     <img
                         className="w-full h-full group-hover:scale-[1.1] transition-all duration-200"
-                        src={product.images.length ? product.images[0].url : "https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a67c4666f047ada3ba87_image-10-shop-product-shopwave-template-p-500.png"}
+                        src={product.images.length ? 'http://localhost:8000/storage/' + product.images[0].url : "https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a67c4666f047ada3ba87_image-10-shop-product-shopwave-template-p-500.png"}
                     />
                 </div>
                 <p className="mt-3 font-semibold">{product.name}</p>

@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 function AdminOrderList() {
-
+    const MySwal = withReactContent(Swal);
     let [orders, setOrders] = useState([]);
-    let [selectedStatus, setSelectedStatus] = useState("pending");
 
     let getOrders = async () => {
         let res = await axios.get('/api/orders', {
@@ -16,18 +18,27 @@ function AdminOrderList() {
         setOrders(res.data.orders)
     }
 
-    let updateOrderStatus = (e) => {
-        let id = 1;
+    let updateOrderStatus = async (e, id) => {
         let updatedStatus = e.target.value;
-        setSelectedStatus(updatedStatus);
         console.log(updatedStatus);
-        axios.put(`/api/orders/${id}`, {
+        let res = await axios.put(`/api/orders/${id}`, {
             status: updatedStatus
         }, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         })
+
+        if (res.status === 200) {
+            if (res.data.message === "Your order is already confirmed") {
+                await MySwal.fire({
+                    title: 'Your order is already confirmed',
+                    text: "You can't change the status of this order",
+                })
+            } else {
+                getOrders()
+            }
+        }
     }
 
     useEffect(() => {
@@ -39,15 +50,6 @@ function AdminOrderList() {
             <div
                 className="relative border border-gray-300 bg-white rounded-md shadow-sm shadow-gray-200 px-5 py-3"
             >
-                <div className="flex justify-end mb-3">
-                    
-                    <a
-                        className="text-sm px-4 flex items-center gap-3 shadow-md py-3 text-white bg-primary hover:bg-blue-900 font-semibold rounded-md transition-all active:animate-press"
-                        href="/productCreate.html"
-                    >
-                        Create
-                    </a>
-                </div>
                 <div
                     className="relative flex flex-col min-w-0 break-words w-full mb-6 rounded-md overflow-hidden border"
                 >
@@ -118,7 +120,7 @@ function AdminOrderList() {
                                             </span>
                                         </td>
                                         <td className={o.status === 'confirmed' ? 'text-green-500' : 'text-yellow-500'}>
-                                            <select name="" id="" value={selectedStatus} onChange={updateOrderStatus}>
+                                            <select name="" id="" value={o.status} onChange={(e) => updateOrderStatus(e, o.id)}>
                                                 {['pending', 'confirmed'].map((status) => (
                                                     <option value={status} key={status} selected={status === o.status}>{status}</option>
                                                 ))}

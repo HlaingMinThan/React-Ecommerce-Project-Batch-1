@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useProduct from "../hooks/useProduct";
 
@@ -9,6 +9,7 @@ export default function ProductDetail() {
     let navigate = useNavigate();
 
     let [quantity, setQuantity] = useState(1)
+    let [selectedIndex, setSelectedIndex] = useState(0);
 
     const addToCart = () => {
         const item = {
@@ -41,30 +42,21 @@ export default function ProductDetail() {
                         <div className="lg:basis-[65%] md:basis-[60%] overflow-hidden">
                             <div className="flex lg:flex-row flex-col-reverse gap-5">
                                 <div className="basis-[10%] flex lg:flex-col flex-row gap-4">
-                                    <div
-                                        className="w-full h-auto rounded-lg overflow-hidden group cursor-pointer"
-                                    >
-                                        <img
-                                            className="w-full h-full group-hover:scale-[1.1] transition-all"
-                                            src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a67c4666f047ada3ba87_image-10-shop-product-shopwave-template-p-500.png"
-                                        />
-                                    </div>
-                                    <div
-                                        className="w-full h-auto rounded-lg overflow-hidden group cursor-pointer"
-                                    >
-                                        <img
-                                            className="w-full h-full group-hover:scale-[1.1] transition-all"
-                                            src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f6a777d6557d526b9dba47_image-12-shop-product-shopwave-template.png"
-                                        />
-                                    </div>
-                                    <div
-                                        className="w-full h-auto rounded-lg overflow-hidden group cursor-pointer"
-                                    >
-                                        <img
-                                            className="w-full h-full group-hover:scale-[1.1] transition-all"
-                                            src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f697b6ea32fefb0084af2c_more-image-3-shop-product-shopwave-template.png"
-                                        />
-                                    </div>
+
+                                    {product.images.map((image, index) => {
+                                        return (
+                                            <div
+                                                onClick={() => setSelectedIndex(index)}
+                                                key={image.id}
+                                                className="w-full h-auto rounded-lg overflow-hidden group cursor-pointer"
+                                            >
+                                                <img
+                                                    className="w-full h-full group-hover:scale-[1.1] transition-all"
+                                                    src={'http://localhost:8000/storage/' + image.url}
+                                                />
+                                            </div>
+                                        )
+                                    })}
                                 </div>
                                 <div className="basis-[90%]">
                                     <div
@@ -72,7 +64,7 @@ export default function ProductDetail() {
                                     >
                                         <img
                                             className="w-full h-full group-hover:scale-[1.1] transition-all duration-200"
-                                            src="https://cdn.prod.website-files.com/62f51a90d298e65b94bbffcd/62f697b6ea32fefb0084af2c_more-image-3-shop-product-shopwave-template.png"
+                                            src={'http://localhost:8000/storage/' + product.images?.[selectedIndex]?.url}
                                         />
                                     </div>
                                 </div>

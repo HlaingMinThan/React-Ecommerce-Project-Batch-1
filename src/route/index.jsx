@@ -15,6 +15,7 @@ import {
   createBrowserRouter,
 } from "react-router-dom";
 import GuestUserRoute from '../components/GuestUser.jsx';
+import names from './names.js';
 
 const router = createBrowserRouter([{
   path: "/",
@@ -63,7 +64,7 @@ const router = createBrowserRouter([{
       element: <AdminOrderList />,
     },
     {
-      path: "/admin/products/create",
+      path: names.PRODUCT_CREATE,
       element: <AdminProductForm />,
     },
     {

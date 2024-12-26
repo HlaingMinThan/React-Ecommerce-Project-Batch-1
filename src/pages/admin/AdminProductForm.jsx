@@ -11,6 +11,9 @@ function AdminProductForm() {
     let [isEdit, setIsEdit] = useState(false);
     let { categories } = useCategories();
     let [loading, setLoading] = useState(false);
+
+    let [images, setImages] = useState([]);
+
     let [form, setForm] = useState({
         name: '',
         price: '',
@@ -43,11 +46,43 @@ function AdminProductForm() {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
+        console.log(res)
+        let createdProductId = null;
         if (res.status === 200) {
+            if (res.data.message === "product created successful.") {
+                createdProductId = res.data.product.id;
+            }
+
+            let productId = isEdit ? id : createdProductId;
+            if (productId) {
+                //upload image 
+                let formdata = new FormData();
+                images.forEach(image => formdata.append('images[]', image));
+                let res = await axios.post(`/api/products/${productId}/update-image`, formdata, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                })
+                console.log(res.data);
+            }
             setLoading(false)
             navigate('/admin')
         }
     }
+
+    let uploadImage = (e) => {
+        let files = Array.from(e.target.files);
+        setImages(files);
+        if (images.length >= 3) {
+            alert('You can only upload 3 images');
+            return;
+        }
+        setImages(files);
+    }
+
+    // useEffect(() => {
+    //     console.log(images);
+    // }, [images])
 
     return (
         <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10 bg-gray-50">
@@ -56,7 +91,7 @@ function AdminProductForm() {
                 <form className="space-y-4 md:space-y-6">
                     <div className="">
                         <div className="image-wrapper">
-                            <input type="file" />
+                            <input type="file" onChange={uploadImage} multiple />
                         </div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

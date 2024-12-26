@@ -3,6 +3,7 @@ import useProducts from "../../hooks/useProducts"
 import axios from "axios";
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import names from "../../route/names";
 const MySwal = withReactContent(Swal);
 
 function AdminProductList() {
@@ -47,7 +48,7 @@ function AdminProductList() {
                     <input className="border border-gray-300 rounded-md p-2 mr-4" placeholder="search here" type="text" value={search} onChange={(e) => setSearch(e.target.value)} />
                     <Link
                         className="text-sm px-4 flex items-center gap-3 shadow-md py-3 text-white bg-primary hover:bg-blue-900 font-semibold rounded-md transition-all active:animate-press"
-                        to="/admin/products/create"
+                        to={names.PRODUCT_CREATE}
                     >
                         Create
                     </Link>
