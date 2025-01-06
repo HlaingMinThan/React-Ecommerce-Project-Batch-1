@@ -3,6 +3,8 @@ import useCategories from "../../hooks/useCategories";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import useProduct from "../../hooks/useProduct";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 function AdminProductForm() {
     let navigate = useNavigate();
@@ -136,13 +138,7 @@ function AdminProductForm() {
                     <div>
                         <div>
                             <label className="font-semibold text-sm">Description</label>
-                            <textarea
-                                value={form.description}
-                                onChange={(e) => setForm({ ...form, description: e.target.value })}
-                                className="w-full border-[1px] border-black/10 py-3 px-3 rounded-[5px]"
-                                placeholder="Enter Description"
-                                rows="5"
-                            ></textarea>
+                            <ReactQuill theme="snow" value={form.description} onChange={str => setForm({ ...form, description: str })} />
                         </div>
                     </div>
                     <div className="flex items-center justify-end space-x-5">

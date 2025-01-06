@@ -2,9 +2,11 @@ import { Link } from "react-router-dom";
 import CC from '../assets/cc.jpg';
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
+import { CartContext } from "../contexts/CartContext";
 
 export default function Navbar() {
     let { user, dispatch } = useContext(AuthContext);
+    let { cartCount } = useContext(CartContext);
 
     return (
         <div
@@ -22,7 +24,7 @@ export default function Navbar() {
                         <p
                             className="w-[25px] rounded-full flex text-sm items-center justify-center h-[25px] bg-primary"
                         >
-                            {localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')).length : 0}
+                            {cartCount}
                         </p>
                         <svg
                             className="md:w-[50px] w-[30px] h-[50px] md:h-[80px]"

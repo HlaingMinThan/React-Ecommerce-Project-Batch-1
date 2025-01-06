@@ -1,3 +1,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  .no-tailwindcss-base h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: revert;
+    font-weight: revert;
+    margin: revert;
+  }
+  .no-tailwindcss-base ul,
+  .no-tailwindcss-base ol {
+    list-style: revert;
+    margin: revert;
+    padding: revert;
+  }
+  /* always center the embed iframe in blog body  */
+  .no-tailwindcss-base iframe {
+    margin: 10px auto;
+  }
+  @media only screen and (max-width: 600px) {
+    .no-tailwindcss-base iframe {
+      width: 350px;
+      height: 200px;
+    }
+  }
+}

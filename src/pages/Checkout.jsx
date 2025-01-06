@@ -1,14 +1,16 @@
 import axios from "axios";
-import { useEffect, useMemo, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { CartContext } from "../contexts/CartContext";
 
 function Checkout() {
     const MySwal = withReactContent(Swal);
     let [products, setProducts] = useState([]);
     let [shipping_address, setShippingAddress] = useState('');
     let [notes, setNotes] = useState('');
+    let { setCartCount } = useContext(CartContext);
     let navigate = useNavigate()
 
     let total = useMemo(() => products.reduce((acc, product) => {
@@ -48,6 +50,7 @@ function Checkout() {
 
             if (res.status === 200) {
                 localStorage.setItem('cart', []);
+                setCartCount(0);
                 await MySwal.fire({
                     title: 'Order created successfully',
                     text: "your order is reported to the admin and we will contact you soon.",

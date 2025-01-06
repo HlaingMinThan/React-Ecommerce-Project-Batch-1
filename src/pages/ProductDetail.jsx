@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useProduct from "../hooks/useProduct";
+import { CartContext } from "../contexts/CartContext";
 
 export default function ProductDetail() {
 
     let { id } = useParams();
     let { product } = useProduct(id);
     let navigate = useNavigate();
+    let { setCartCount } = useContext(CartContext);
 
     let [quantity, setQuantity] = useState(1)
     let [selectedIndex, setSelectedIndex] = useState(0);
@@ -30,7 +32,7 @@ export default function ProductDetail() {
         }
 
         localStorage.setItem('cart', JSON.stringify(cart));
-        console.log(cart);
+        setCartCount(cart.length);
         navigate('/checkout')
     }
 
@@ -207,14 +209,7 @@ export default function ProductDetail() {
                             <div>
                                 <h1 className="text-2xl font-semibold">Product information</h1>
                                 <div className="mt-4" id="description">
-                                    <p className="text-lg text-black/50">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam
-                                        dolorem facere veniam, esse iusto itaque architecto, a quis
-                                        cupiditate beatae quam aspernatur, dolores sint corrupti
-                                        similique ullam autem eveniet ea tenetur ut? Itaque molestias
-                                        quod similique laborum aliquid. Atque similique expedita tempora
-                                        est commodi distinctio sequi ipsum ducimus doloremque beatae!
-                                    </p>
+                                    <div dangerouslySetInnerHTML={{ __html: product.description }} className="no-tailwindcss-base" />
                                 </div>
                             </div>
                             <div className="w-full h-[1px] bg-black/10 my-16"></div>
@@ -243,10 +238,7 @@ export default function ProductDetail() {
                                     {product.category.name}
                                 </div>
                                 <h1 className="text-2xl mt-3 font-medium">{product.name}</h1>
-                                <a
-                                    href="#description"
-                                    className="mt-2 text-[16px] mb-5 text-black/70 line-clamp-3 font-medium"
-                                >{product.description}</a>
+
                                 <div className="flex items-end mt-1 gap-2">
                                     <p className="font-bold text-2xl">{product.price} MMK</p>
                                 </div>

@@ -5,7 +5,6 @@ export default function Home() {
 
     let { products, search, setSearch } = useProducts();
     let { categories } = useCategories();
-
     return (
         <div className="xl:px-32 sm:px-5 px-2">
             <div
